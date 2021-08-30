@@ -106,6 +106,6 @@ fi
 
 if [[ ! -f /etc/cron.d/automation ]]; then
 {
-    echo "* * * * * root /root/Automation_Project/automation.sh >> /tmp/automation.log" > /etc/cron.d/automation
+    echo "0 0 * * * root /root/Automation_Project/automation.sh >> /tmp/automation.log" > /etc/cron.d/automation
 }
 fi
