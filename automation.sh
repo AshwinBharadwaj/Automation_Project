@@ -106,9 +106,6 @@ fi
 
 if [[ ! -f /etc/cron.d/automation ]]; then
 {
-    croncmd="/root/Automation_Project/automation.sh"
-    cronjob="0 0 * * * root $croncmd"
-    ( crontab -l | grep -v -F "$croncmd" ; echo "$cronjob" ) | crontab -
-    echo $cronjob > /etc/cron.d/automation
+    echo "* * * * * root /root/Automation_Project/automation.sh >> /tmp/automation.log" > /etc/cron.d/automation
 }
 fi
