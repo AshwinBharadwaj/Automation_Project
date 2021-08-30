@@ -79,3 +79,33 @@ else
     logger "ERROR" "Uploading archive failed. Check above for error"
 }
 fi
+
+file_size=$(du -h /tmp/${my_name}-httpd-logs-${timestamp}.tar | awk '{print $1}')
+
+logger "INFO" "Updating and uploading log file"
+
+temp=$(echo "<tr>" "<td>httpd-logs</td>" "<td>$timestamp</td>" "<td>tar</td>" "<td>$file_size</td>" "</tr>")
+
+sed -i "24i $temp" /var/www/html/inventory.html
+
+aws s3 \
+cp /var/www/html/inventory.html \
+s3://${s3_bucket}/inventory.html
+
+if [[ $? -eq 0 ]]; then
+{
+    logger "INFO" "Archive uploaded successfully with the archive name as : ${my_name}-httpd-logs-${timestamp}.tar"
+}
+else
+{
+    logger "ERROR" "Uploading archive failed. Check above for error"
+}
+fi
+
+# Verifying and creating cron
+
+if [[ ! -f /etc/cron.d/automation ]]; then
+{
+    echo "* * * * * root /root/Automation_Project/automation.sh >> /tmp/automation.log" > /etc/cron.d/automation
+}
+fi
